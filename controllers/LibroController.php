@@ -13,6 +13,7 @@ class LibroController extends ActiveRecord
     public function renderizarPagina(Router $router)
     {
         $router->render('libros/index', []);
+        }
     }
 
     public static function guardarAPI()
@@ -58,7 +59,12 @@ class LibroController extends ActiveRecord
         }
     }
 
-     public static function buscarAPI()
+
+
+
+
+    //BUASCAR BUSCAR
+    public static function buscarAPI()
     {
         try {
             $condiciones = ["libro_situacion = 1"];
@@ -82,7 +88,10 @@ class LibroController extends ActiveRecord
         }
     }
 
-    public static function modificarAPI()
+
+    //MODIFICAR
+
+      public static function modificarAPI()
     {
         getHeadersApi();
 
@@ -126,7 +135,9 @@ class LibroController extends ActiveRecord
         }
     }
 
-    public static function EliminarAPI()
+    //ELIMINAR
+
+  public static function EliminarAPI()
     {
         try {
             $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
@@ -146,4 +157,3 @@ class LibroController extends ActiveRecord
             ]);
         }
     }
-}

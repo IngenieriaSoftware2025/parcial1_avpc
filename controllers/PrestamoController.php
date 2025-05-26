@@ -62,7 +62,7 @@ class PrestamoController extends ActiveRecord
                 'codigo' => 1,
                 'mensaje' => 'El préstamo ha sido registrado correctamente'
             ]);
-            ]);
+            return;     
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
@@ -70,11 +70,11 @@ class PrestamoController extends ActiveRecord
                 'mensaje' => 'Error al guardar el préstamo',
                 'detalle' => $e->getMessage(),
             ]);
-        }
+        }   
     }
 
     public static function buscarAPI()
-    {
+    {   
         try {
             $data = Prestamos::ObtenerPrestamosConLibrosYUsuarios();
 
@@ -146,84 +146,7 @@ class PrestamoController extends ActiveRecord
             ]);
         }
     }
-    }
 
-    // public static function buscarAPI() {
-    //     try {
-    //         $data = Productos::ObtenerProductosConMarca();
-    //
-    //         http_response_code(200);
-    //         echo json_encode([
-    //             'codigo' => 1,
-    //             'mensaje' => 'Productos obtenidos correctamente',
-    //             'data' => $data
-    //         ]);
-    //     } catch (Exception $e) {
-    //         http_response_code(400);
-    //         echo json_encode([
-    //             'codigo' => 0,
-    //             'mensaje' => 'Error al obtener los productos',
-    //             'detalle' => $e->getMessage(),
-    //         ]);
-    //     }
-    // }
-
-    public static function modificarAPI()
-    {
-        getHeadersApi();
-
-        $id = $_POST['producto_id'];
-        $_POST['producto_nombre'] = htmlspecialchars($_POST['producto_nombre']);
-
-        $cantidad_nombre = strlen($_POST['producto_nombre']);
-
-        if ($cantidad_nombre < 2) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'El nombre del producto debe tener al menos 2 caracteres'
-            ]);
-            return;
-        }
-
-        $_POST['producto_descripcion'] = htmlspecialchars($_POST['producto_descripcion']);
-        $_POST['producto_precio'] = filter_var($_POST['producto_precio'], FILTER_VALIDATE_FLOAT);
-        $_POST['producto_stock'] = filter_var($_POST['producto_stock'], FILTER_VALIDATE_INT);
-        $_POST['marca_id'] = filter_var($_POST['marca_id'], FILTER_VALIDATE_INT);
-
-        if ($_POST['producto_precio'] <= 0) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'El precio debe ser mayor a 0'
-            ]);
-            return;
-        }
-
-        if ($_POST['producto_stock'] < 0) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'El stock no puede ser negativo'
-            ]);
-            return;
-        }
-
-        if (!$_POST['marca_id'] || $_POST['marca_id'] <= 0) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Debe seleccionar una marca válida'
-            ]);
-            return;
-        }
-
-        try {
-            $data = Productos::find($id);
-            $data->sincronizar([
-                'producto_nombre' => $_POST['producto_nombre'],
-                'producto_descripcion' => $_POST['producto_descripcion'],
-                'producto_precio' => $_POST['producto_precio'],
     // Método duplicado y no relacionado con préstamos, eliminado para evitar conflictos y errores.
     public static function EliminarAPI()
     {
