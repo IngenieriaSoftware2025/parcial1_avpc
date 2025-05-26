@@ -1,4 +1,3 @@
-import { Dropdown } from "bootstrap";
 import Swal from "sweetalert2";
 import { validarFormulario } from '../funciones';
 import DataTable from "datatables.net-bs5";
@@ -162,14 +161,14 @@ const datatable = new DataTable('#TablePrestamos', {
             title: 'No.',
             data: 'prestamo_id',
             width: '%',
-            render: (data, type, row, meta) => meta.row + 1
+            render: (_data, _type, _row, meta) => meta.row + 1
         },
         { title: 'Libro', data: 'prestamo_nombre_libro' },
         { title: 'Descripción', data: 'prestamo_descripcion_libro' },
         { 
             title: 'Precio', 
             data: 'prestamo_precio_libro',
-            render: (data, type, row) => {
+            render: (data) => {
                 return `Q. ${parseFloat(data).toFixed(2)}`;
             }
         },
@@ -180,7 +179,7 @@ const datatable = new DataTable('#TablePrestamos', {
             data: 'prestamo_id',
             searchable: false,
             orderable: false,
-            render: (data, type, row, meta) => {
+            render: (data, _type, row) => {
                 return `
                  <div class='d-flex justify-content-center'>
                      <button class='btn btn-warning modificar mx-1' 

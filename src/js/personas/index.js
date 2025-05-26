@@ -1,15 +1,14 @@
-import { Dropdown } from "bootstrap";
 import Swal from "sweetalert2";
 import { validarFormulario } from '../funciones';
 import DataTable from "datatables.net-bs5";
 import { lenguaje } from "../lenguaje";
 
-const FormPersonas = document.getElementByIPersonas');
+const FormPersonas = document.getElementById('FormPersonas');
 const BtnGuardar = document.getElementById('BtnGuardar');
 const BtnModificar = document.getElementById('BtnModificar');
 const BtnLimpiar = document.getElementById('BtnLimpiar');
 const InputPersonaTelefono = document.getElementById('persona_telefono');
-const PersonaNit = document.getElementById('persoa_nit');
+const PersonaNit = document.getElementById('persona_nit');
 const FechaInicio = document.getElementById('fecha_inicio');
 const FechaFin = document.getElementById('fecha_fin');
 const BtnFiltrarFecha = document.getElementById('btn_filtrar_fecha');
@@ -95,7 +94,7 @@ const GuardarPersona = async (event) => {
 
     const body = new FormData(FormPersonas);
 
-    const url = '/tienda/Personas/guardarAPI';
+    const url = '/parcial1_avpc/Personas/guardarAPI';
     const config = {
         method: 'POST',
         body
@@ -142,7 +141,7 @@ const BuscarPersonas = async () => {
     if (fecha_inicio) params.append('fecha_inicio', fecha_inicio);
     if (fecha_fin) params.append('fecha_fin', fecha_fin);
 
-    const url = `/tienda/Personas/buscarAPI?${params.toString()}`;
+    const url = `/parcial1_avpc/Personas/buscarAPI?${params.toString()}`;
     const config = {
         method: 'GET'
     }
@@ -189,7 +188,7 @@ const datatable = new DataTable('#TablePersonas', {
             title: 'No.',
             data: 'persona_id',
             width: '%',
-            render: (data, type, row, meta) => meta.row + 1
+            render: (_data, _type, _row, meta) => meta.row + 1
         },
         { title: 'Nombres', data: 'persona_nombres' },
         { title: 'Apellidos', data: 'persona_apellidos' },
@@ -203,7 +202,7 @@ const datatable = new DataTable('#TablePersonas', {
             data: 'persona_id',
             searchable: false,
             orderable: false,
-            render: (data, type, row, meta) => {
+            render: (data, _type, row, _meta) => {
                 return `
                  <div class='d-flex justify-content-center'>
                      <button class='btn btn-warning modificar mx-1' 
@@ -248,16 +247,16 @@ const llenarFormulario = (event) => {
 }
 
 const limpiarTodo = () => {
-    Formpersonas.reset();
+    FormPersonas.reset();
     BtnGuardar.classList.remove('d-none');
     BtnModificar.classList.add('d-none');
 }
 
-const Modificarpersona = async (event) => {
+const ModificarPersona = async (event) => {
     event.preventDefault();
     BtnModificar.disabled = true;
 
-    if (!validarFormulario(Formpersonas, [''])) {
+    if (!validarFormulario(FormPersonas, [''])) {
         Swal.fire({
             position: "center",
             icon: "info",
@@ -269,9 +268,9 @@ const Modificarpersona = async (event) => {
         return;
     }
 
-    const body = new FormData(Formpersonas);
+    const body = new FormData(FormPersonas);
 
-    const url = '/tienda/personas/modificarAPI';
+    const url = '/parcial1_avpc/personas/modificarAPI';
     const config = {
         method: 'POST',
         body
@@ -292,7 +291,7 @@ const Modificarpersona = async (event) => {
             });
 
             limpiarTodo();
-            Buscarpersonas();
+            BuscarPersonas();
         } else {
             await Swal.fire({
                 position: "center",
@@ -308,7 +307,7 @@ const Modificarpersona = async (event) => {
     BtnModificar.disabled = false;
 }
 
-const Eliminarpersonas = async (e) => {
+const EliminarPersonas = async (e) => {
     const idpersona = e.currentTarget.dataset.id
 
     const AlertaConfirmarEliminar = await Swal.fire({
@@ -324,7 +323,7 @@ const Eliminarpersonas = async (e) => {
     });
 
     if (AlertaConfirmarEliminar.isConfirmed) {
-        const url =`/tienda/personas/eliminar?id=${idpersona}`;
+        const url =`/parcial1_avpc/personas/eliminar?id=${idpersona}`;
         const config = {
             method: 'GET'
         }
@@ -343,7 +342,7 @@ const Eliminarpersonas = async (e) => {
                     showConfirmButton: true,
                 });
                 
-                Buscarpersonas();
+                BuscarPersonas();
             } else {
                 await Swal.fire({
                     position: "center",
@@ -359,12 +358,12 @@ const Eliminarpersonas = async (e) => {
     }
 }
 
-Buscarpersonas();
-datatable.on('click', '.eliminar', Eliminarpersonas);
+BuscarPersonas();
+datatable.on('click', '.eliminar', EliminarPersonas);
 datatable.on('click', '.modificar', llenarFormulario);
-Formpersonas.addEventListener('submit', Guardarpersona);
-personaNit.addEventListener('change', EsValidoNit);
-InputpersonaTelefono.addEventListener('change', ValidarTelefono);
+FormPersonas.addEventListener('submit', GuardarPersona);
+PersonaNit.addEventListener('change', EsValidoNit);
+InputPersonaTelefono.addEventListener('change', ValidarTelefono);
 BtnLimpiar.addEventListener('click', limpiarTodo);
-BtnModificar.addEventListener('click', Modificarpersona);
-BtnFiltrarFecha.addEventListener('click', Buscarpersonas);
+BtnModificar.addEventListener('click', ModificarPersona);
+BtnFiltrarFecha.addEventListener('click', BuscarPersonas);

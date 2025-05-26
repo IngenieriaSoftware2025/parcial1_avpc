@@ -5,7 +5,7 @@ namespace Controllers;
 use Exception;
 use Model\ActiveRecord;
 use Model\Prestamos;
-use Model\prestamos;
+use Model\Libros;
 use MVC\Router;
 
 class PrestamoController extends ActiveRecord
@@ -13,9 +13,10 @@ class PrestamoController extends ActiveRecord
 
     public function renderizarPagina(Router $router)
     {
-        $prestamos = Prestamos::ObtenerPrestamosActivas();
+        // Asegúrate de que el método ObtenerLibrosActivos exista en la clase Libros
+        $libros = Libros::ObtenerLibrosActivos();
         $router->render('prestamos/index', [
-            'prestamos' => $prestamos
+            'libros' => $libros
         ]);
     }
 
@@ -23,72 +24,50 @@ class PrestamoController extends ActiveRecord
     {
         getHeadersApi();
 
-        $_POST['prestamo_nombre_libro'] = htmlspecialchars($_POST['prestamo_nombre_libro']);
-        $cantidad_nombre = strlen($_POST['prestamo_nombre_libro']);
+        $_POST['prestamo_libro_id'] = filter_var($_POST['prestamo_libro_id'], FILTER_VALIDATE_INT);
+        $_POST['prestamo_usuario_id'] = filter_var($_POST['prestamo_usuario_id'], FILTER_VALIDATE_INT);
+        $_POST['prestamo_fecha_inicio'] = date('Y-m-d H:i', strtotime($_POST['prestamo_fecha_inicio']));
+        $_POST['prestamo_fecha_fin'] = date('Y-m-d H:i', strtotime($_POST['prestamo_fecha_fin']));
 
-        if ($cantidad_nombre < 2) {
+        if (!$_POST['prestamo_libro_id'] || $_POST['prestamo_libro_id'] <= 0) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'El nombre del prestamos debe tener al menos 2 caracteres'
+                'mensaje' => 'Debe seleccionar un libro válido'
             ]);
             return;
         }
 
-        $_POST['prestamo_descripcion_libro'] = htmlspecialchars($_POST['prestamo_descripcion_libro']);
-        $_POST['prestamo_precio_libro'] = filter_var($_POST['prestamo_precio_libro'], FILTER_VALIDATE_FLOAT);
-        $_POST['prestamo_stock_libro'] = filter_var($_POST['prestamo_stock_libro'], FILTER_VALIDATE_INT);
-        $_POST['libro_id'] = filter_var($_POST['libro_id'], FILTER_VALIDATE_INT);
-
-        if ($_POST['prestamo_precio_libro'] <= 0) {
+        if (!$_POST['prestamo_usuario_id'] || $_POST['prestamo_usuario_id'] <= 0) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'El precio debe ser mayor a 0'
-            ]);
-            return;
-        }
-
-        if ($_POST['prestamo_stock_libro'] < 0) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'El stock no puede ser negativo'
-            ]);
-            return;
-        }
-
-        if (!$_POST['libro_id'] || $_POST['libro_id'] <= 0) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Debe seleccionar una prestamo válida'
+                'mensaje' => 'Debe seleccionar un usuario válido'
             ]);
             return;
         }
 
         try {
-            $data = new Libros([
-                'prestamo_nombre_libro' => $_POST['prestamo_nombre_libro'],
-                'prestamo_descripcion_libro' => $_POST['prestamo_descripcion_libro'],
-                'prestamo_precio_libro' => $_POST['prestamo_precio_libro'],
-                'prestamo_stock_libro' => $_POST['prestamo_stock_libro'],
-                'libro_id' => $_POST['libro_id'],
+            $data = new Prestamos([
+                'prestamo_libro_id' => $_POST['prestamo_libro_id'],
+                'prestamo_usuario_id' => $_POST['prestamo_usuario_id'],
+                'prestamo_fecha_inicio' => $_POST['prestamo_fecha_inicio'],
+                'prestamo_fecha_fin' => $_POST['prestamo_fecha_fin'],
                 'prestamo_situacion' => 1
             ]);
-
-            $crear = $data->crear();
+            $data->crear();
 
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'El prestamos ha sido registrado correctamente'
+                'mensaje' => 'El préstamo ha sido registrado correctamente'
+            ]);
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al guardar el prestamos',
+                'mensaje' => 'Error al guardar el préstamo',
                 'detalle' => $e->getMessage(),
             ]);
         }
@@ -97,48 +76,122 @@ class PrestamoController extends ActiveRecord
     public static function buscarAPI()
     {
         try {
-            $data = Prestamos::ObtenerPrestamosConprestamo();
+            $data = Prestamos::ObtenerPrestamosConLibrosYUsuarios();
 
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'prestamos obtenidos correctamente',
+                'mensaje' => 'Préstamos obtenidos correctamente',
                 'data' => $data
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al obtener los prestamos',
+                'mensaje' => 'Error al obtener los préstamos',
                 'detalle' => $e->getMessage(),
             ]);
         }
     }
-
     public static function modificarAPI()
     {
         getHeadersApi();
 
         $id = $_POST['prestamo_id'];
-        $_POST['prestamo_nombre_libro'] = htmlspecialchars($_POST['prestamo_nombre_libro']);
+        $_POST['prestamo_libro_id'] = filter_var($_POST['prestamo_libro_id'], FILTER_VALIDATE_INT);
+        $_POST['prestamo_usuario_id'] = filter_var($_POST['prestamo_usuario_id'], FILTER_VALIDATE_INT);
+        $_POST['prestamo_fecha_inicio'] = date('Y-m-d H:i', strtotime($_POST['prestamo_fecha_inicio']));
+        $_POST['prestamo_fecha_fin'] = date('Y-m-d H:i', strtotime($_POST['prestamo_fecha_fin']));
 
-        $cantidad_nombre = strlen($_POST['prestamo_nombre_libro']);
+        if (!$_POST['prestamo_libro_id'] || $_POST['prestamo_libro_id'] <= 0) {
+            http_response_code(400);
+            echo json_encode([
+                'codigo' => 0,
+                'mensaje' => 'Debe seleccionar un libro válido'
+            ]);
+            return;
+        }
+
+        if (!$_POST['prestamo_usuario_id'] || $_POST['prestamo_usuario_id'] <= 0) {
+            http_response_code(400);
+            echo json_encode([
+                'codigo' => 0,
+                'mensaje' => 'Debe seleccionar un usuario válido'
+            ]);
+            return;
+        }
+
+        try {
+            $data = Prestamos::find($id);
+            $data->sincronizar([
+                'prestamo_libro_id' => $_POST['prestamo_libro_id'],
+                'prestamo_usuario_id' => $_POST['prestamo_usuario_id'],
+                'prestamo_fecha_inicio' => $_POST['prestamo_fecha_inicio'],
+                'prestamo_fecha_fin' => $_POST['prestamo_fecha_fin'],
+                'prestamo_situacion' => 1
+            ]);
+            $data->actualizar();
+
+            http_response_code(200);
+            echo json_encode([
+                'codigo' => 1,
+                'mensaje' => 'La información del préstamo ha sido modificada exitosamente'
+            ]);
+        } catch (Exception $e) {
+            http_response_code(400);
+            echo json_encode([
+                'codigo' => 0,
+                'mensaje' => 'Error al modificar el préstamo',
+                'detalle' => $e->getMessage(),
+            ]);
+        }
+    }
+    }
+
+    // public static function buscarAPI() {
+    //     try {
+    //         $data = Productos::ObtenerProductosConMarca();
+    //
+    //         http_response_code(200);
+    //         echo json_encode([
+    //             'codigo' => 1,
+    //             'mensaje' => 'Productos obtenidos correctamente',
+    //             'data' => $data
+    //         ]);
+    //     } catch (Exception $e) {
+    //         http_response_code(400);
+    //         echo json_encode([
+    //             'codigo' => 0,
+    //             'mensaje' => 'Error al obtener los productos',
+    //             'detalle' => $e->getMessage(),
+    //         ]);
+    //     }
+    // }
+
+    public static function modificarAPI()
+    {
+        getHeadersApi();
+
+        $id = $_POST['producto_id'];
+        $_POST['producto_nombre'] = htmlspecialchars($_POST['producto_nombre']);
+
+        $cantidad_nombre = strlen($_POST['producto_nombre']);
 
         if ($cantidad_nombre < 2) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'El nombre del prestamo debe tener al menos 2 caracteres'
+                'mensaje' => 'El nombre del producto debe tener al menos 2 caracteres'
             ]);
             return;
         }
 
-        $_POST['prestamo_descripcion_libro'] = htmlspecialchars($_POST['prestamo_descripcion_libro']);
-        $_POST['prestamo_precio_libro'] = filter_var($_POST['prestamo_precio_libro'], FILTER_VALIDATE_FLOAT);
-        $_POST['prestamo_stock_libro'] = filter_var($_POST['prestamo_stock_libro'], FILTER_VALIDATE_INT);
-        $_POST['libro_id'] = filter_var($_POST['libro_id'], FILTER_VALIDATE_INT);
+        $_POST['producto_descripcion'] = htmlspecialchars($_POST['producto_descripcion']);
+        $_POST['producto_precio'] = filter_var($_POST['producto_precio'], FILTER_VALIDATE_FLOAT);
+        $_POST['producto_stock'] = filter_var($_POST['producto_stock'], FILTER_VALIDATE_INT);
+        $_POST['marca_id'] = filter_var($_POST['marca_id'], FILTER_VALIDATE_INT);
 
-        if ($_POST['prestamo_precio_libro'] <= 0) {
+        if ($_POST['producto_precio'] <= 0) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
@@ -147,7 +200,7 @@ class PrestamoController extends ActiveRecord
             return;
         }
 
-        if ($_POST['prestamo_stock_libro'] < 0) {
+        if ($_POST['producto_stock'] < 0) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
@@ -156,60 +209,39 @@ class PrestamoController extends ActiveRecord
             return;
         }
 
-        if (!$_POST['libro_id'] || $_POST['libro_id'] <= 0) {
+        if (!$_POST['marca_id'] || $_POST['marca_id'] <= 0) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Debe seleccionar una prestamo válida'
+                'mensaje' => 'Debe seleccionar una marca válida'
             ]);
             return;
         }
 
         try {
-            $data = Prestamos::find($id);
+            $data = Productos::find($id);
             $data->sincronizar([
-                'prestamo_nombre_libro' => $_POST['prestamo_nombre_libro'],
-                'prestamo_descripcion_libro' => $_POST['prestamo_descripcion_libro'],
-                'prestamo_precio_libro' => $_POST['prestamo_precio_libro'],
-                'prestamo_stock_libro' => $_POST['prestamo_stock_libro'],
-                'libro_id' => $_POST['libro_id'],
-                'prestamo_situacion' => 1
-            ]);
-            $data->actualizar();
-
-            http_response_code(200);
-            echo json_encode([
-                'codigo' => 1,
-                'mensaje' => 'El prestamo ha sido modificado exitosamente'
-            ]);
-        } catch (Exception $e) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Error al modificar el prestamo',
-                'detalle' => $e->getMessage(),
-            ]);
-        }
-    }
-
+                'producto_nombre' => $_POST['producto_nombre'],
+                'producto_descripcion' => $_POST['producto_descripcion'],
+                'producto_precio' => $_POST['producto_precio'],
+    // Método duplicado y no relacionado con préstamos, eliminado para evitar conflictos y errores.
     public static function EliminarAPI()
     {
         try {
             $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
-            $ejecutar = Prestamos::EliminarPrestamo($id);
+            Prestamos::EliminarPrestamo($id);
 
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'El prestamo ha sido eliminado correctamente'
+                'mensaje' => 'El préstamo ha sido eliminado correctamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al eliminar el prestamo',
+                'mensaje' => 'Error al eliminar el préstamo',
                 'detalle' => $e->getMessage(),
             ]);
         }
     }
-}

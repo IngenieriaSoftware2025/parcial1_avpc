@@ -1,4 +1,3 @@
-import { Dropdown } from "bootstrap";
 import Swal from "sweetalert2";
 import { validarFormulario } from '../funciones';
 import DataTable from "datatables.net-bs5";
@@ -27,7 +26,7 @@ const GuardarLibro = async (event) => {
 
     const body = new FormData(FormLibros);
 
-    const url = '/tienda/libros/guardarAPI';
+    const url = '/parcial1_avpc/libros/guardarAPI';
     const config = {
         method: 'POST',
         body
@@ -66,7 +65,7 @@ const GuardarLibro = async (event) => {
 }
 
 const BuscarLibros = async () => {
-    const url = `/tienda/libros/buscarAPI`;
+    const url = `/parcial1_avpc/libros/buscarAPI`;
     const config = {
         method: 'GET'
     }
@@ -122,7 +121,7 @@ const datatable = new DataTable('#TableLibros', {
             data: 'libro_id',
             searchable: false,
             orderable: false,
-            render: (data, type, row, meta) => {
+            render: (data, type, row) => {
                 return `
                  <div class='d-flex justify-content-center'>
                      <button class='btn btn-warning modificar mx-1' 
@@ -180,7 +179,7 @@ const ModificarLibro = async (event) => {
 
     const body = new FormData(FormLibros);
 
-    const url = '/tienda/Libros/modificarAPI';
+    const url = '/parcial1_avpc/Libros/modificarAPI';
     const config = {
         method: 'POST',
         body
@@ -233,7 +232,7 @@ const EliminarLibros = async (e) => {
     });
 
     if (AlertaConfirmarEliminar.isConfirmed) {
-        const url =`/tienda/libros/eliminar?id=${idLibro}`;
+        const url =`/parcial1_avpc/libros/eliminar?id=${idLibro}`;
         const config = {
             method: 'GET'
         }
@@ -271,6 +270,6 @@ const EliminarLibros = async (e) => {
 BuscarLibros();
 datatable.on('click', '.eliminar', EliminarLibros);
 datatable.on('click', '.modificar', llenarFormulario);
-FormLibros.addEventListener('submit', GuardarMarcaLibro);
+FormLibros.addEventListener('submit', GuardarLibro);
 BtnLimpiar.addEventListener('click', limpiarTodo);
-BtnModificar.addEventListener('click', ModificarLimpia);
+BtnModificar.addEventListener('click', ModificarLibro);

@@ -13,7 +13,7 @@
                         
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="libro_titulo" class="form-label">ingresa el nombre dle libro</label>
+                                <label for="libro_titulo" class="form-label">Ingresa el nombre del libro</label>
                                 <input type="text" class="form-control" id="libro_titulo" name="libro_titulo" required>
                             </div>
                             <div class="col-md-6">
@@ -39,12 +39,12 @@
         </div>
     </div>
 
-    <!-- Tabla de Libros -->
+
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header bg-info text-white">
-                    <h4 class="text-center mb-0">Libros registradas en la base de datos</h4>
+                    <h4 class="text-center mb-0">Libros registrados en la base de datos</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

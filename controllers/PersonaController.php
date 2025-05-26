@@ -12,7 +12,7 @@ class PersonaController extends ActiveRecord
 
     public function renderizarPagina(Router $router)
     {
-        $router->render('Personas/index', []);
+        $router->render('personas/index', []);
     }
 
     public static function guardarAPI()
@@ -86,13 +86,13 @@ class PersonaController extends ActiveRecord
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'El persona ha sido registrado correctamente'
+                'mensaje' => 'La persona ha sido registrada correctamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al guardar el persona',
+                'mensaje' => 'Error al guardar la persona',
                 'detalle' => $e->getMessage(),
             ]);
         }
@@ -121,14 +121,14 @@ class PersonaController extends ActiveRecord
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'personas obtenidos correctamente',
+                'mensaje' => 'Personas obtenidas correctamente',
                 'data' => $data
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al obtener los personas',
+                'mensaje' => 'Error al obtener las personas',
                 'detalle' => $e->getMessage(),
             ]);
         }
@@ -207,13 +207,13 @@ class PersonaController extends ActiveRecord
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'La información del persona ha sido modificada exitosamente'
+                'mensaje' => 'La información de la persona ha sido modificada exitosamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al modificar el persona',
+                'mensaje' => 'Error al modificar la persona',
                 'detalle' => $e->getMessage(),
             ]);
         }
@@ -228,13 +228,13 @@ class PersonaController extends ActiveRecord
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'El personas ha sido eliminado correctamente'
+                'mensaje' => 'La persona ha sido eliminada correctamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al eliminar el personas',
+                'mensaje' => 'Error al eliminar la persona',
                 'detalle' => $e->getMessage(),
             ]);
         }

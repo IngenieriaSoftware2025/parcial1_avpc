@@ -26,7 +26,7 @@ class LibroController extends ActiveRecord
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'El nombre de la libro debe tener al menos 2 caracteres'
+                'mensaje' => 'El nombre del libro debe tener al menos 2 caracteres'
             ]);
             return;
         }
@@ -46,19 +46,19 @@ class LibroController extends ActiveRecord
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'La libros ha sido registrada correctamente'
+                'mensaje' => 'El libro ha sido registrado correctamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al guardar la libros',
+                'mensaje' => 'Error al guardar el libro',
                 'detalle' => $e->getMessage(),
             ]);
         }
     }
 
-    public static function buscarAPI()
+     public static function buscarAPI()
     {
         try {
             $condiciones = ["libro_situacion = 1"];
@@ -69,14 +69,14 @@ class LibroController extends ActiveRecord
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'libros obtenidas correctamente',
+                'mensaje' => 'Libros obtenidos correctamente',
                 'data' => $data
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al obtener las libros',
+                'mensaje' => 'Error al obtener los libros',
                 'detalle' => $e->getMessage(),
             ]);
         }
@@ -95,7 +95,7 @@ class LibroController extends ActiveRecord
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'El nombre de la libro debe tener al menos 2 caracteres'
+                'mensaje' => 'El nombre del libro debe tener al menos 2 caracteres'
             ]);
             return;
         }
@@ -103,7 +103,7 @@ class LibroController extends ActiveRecord
         $_POST['libro_autor'] = htmlspecialchars($_POST['libro_autor']);
 
         try {
-            $data = Libro::find($id);
+            $data = Libros::find($id);
             $data->sincronizar([
                 'libro_titulo' => $_POST['libro_titulo'],
                 'libro_autor' => $_POST['libro_autor'],
@@ -114,13 +114,13 @@ class LibroController extends ActiveRecord
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'La libro ha sido modificada exitosamente'
+                'mensaje' => 'El libro ha sido modificado exitosamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al modificar la libro',
+                'mensaje' => 'Error al modificar el libro',
                 'detalle' => $e->getMessage(),
             ]);
         }
@@ -135,13 +135,13 @@ class LibroController extends ActiveRecord
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'La libros ha sido eliminada correctamente'
+                'mensaje' => 'El libro ha sido eliminado correctamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al eliminar la libros',
+                'mensaje' => 'Error al eliminar el libro',
                 'detalle' => $e->getMessage(),
             ]);
         }
