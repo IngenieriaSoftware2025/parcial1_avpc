@@ -109,29 +109,10 @@ const datatable = new DataTable('#TableLibros', {
     language: lenguaje,
     data: [],
     columns: [
-        {
-            title: 'No.',
-            data: 'libro_id',
-            width: '5%',
-            render: (data, type, row, meta) => meta.row + 1
-        },
-        { 
-            title: 'Título', 
-            data: 'libro_titulo',
-            width: '40%'
-        },
-        { 
-            title: 'Autor', 
-            data: 'libro_autor',
-            width: '35%'
-        },
-        {
-            title: 'Acciones',
-            data: 'libro_id',
-            searchable: false,
-            orderable: false,
-            width: '20%',
-            render: (data, type, row, meta) => {
+        {title: 'No.',data: 'libro_id',width: '5%',render: (data, type, row, meta) => meta.row + 1},
+        { title: 'Título', data: 'libro_titulo',width: '40%'},
+        { title: 'Autor', data: 'libro_autor',width: '35%'},
+        {title: 'Acciones',data: 'libro_id',searchable: false,orderable: false, width: '20%',render: (data, type, row, meta) => {
                 return `
                  <div class='d-flex justify-content-center'>
                      <button class='btn btn-warning modificar mx-1 btn-sm' 
@@ -278,10 +259,8 @@ const EliminarLibros = async (e) => {
     }
 }
 
-// Inicializar
 BuscarLibros();
 
-// Event Listeners
 datatable.on('click', '.eliminar', EliminarLibros);
 datatable.on('click', '.modificar', llenarFormulario);
 FormLibros.addEventListener('submit', GuardarLibro);

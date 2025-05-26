@@ -6,44 +6,36 @@ class Prestamos extends ActiveRecord {
 
     public static $tabla = 'prestamos';
     public static $columnasDB = [
-        'prestamo_nombre_libro',
-        'prestamo_descripcion_libro',
-        'prestamo_precio_libro',
-        'prestamo_stock_libro',
-        'libro_id',
+        'prestamo_libro_id',
+        'prestamo_persona_id',
+        'prestamo_fecha_prestamo',
+        'prestamo_devuelto',
+        'prestamo_fecha_devolucion',
         'prestamo_situacion'
     ];
 
-    public static $idTabla = 'producto_id';
-    public $producto_id;
-    public $prestamo_nombre_libro;
-    public $prestamo_descripcion_libro;
-    public $prestamo_precio_libro;
-    public $prestamo_stock_libro;
-    public $libro_id;
+    public static $idTabla = 'prestamo_id';
+    public $prestamo_id;
+    public $prestamo_libro_id;
+    public $prestamo_persona_id;
+    public $prestamo_fecha_prestamo;
+    public $prestamo_devuelto;
+    public $prestamo_fecha_devolucion;
     public $prestamo_situacion;
 
     public function __construct($args = []){
-        $this->producto_id = $args['producto_id'] ?? null;
-        $this->prestamo_nombre_libro = $args['prestamo_nombre_libro'] ?? '';
-        $this->prestamo_descripcion_libro = $args['prestamo_descripcion_libro'] ?? '';
-        $this->prestamo_precio_libro = $args['prestamo_precio_libro'] ?? 0.00;
-        $this->prestamo_stock_libro = $args['prestamo_stock_libro'] ?? 0;
-        $this->libro_id = $args['libro_id'] ?? 0;
+        $this->prestamo_id = $args['prestamo_id'] ?? null;
+        $this->prestamo_libro_id = $args['prestamo_libro_id'] ?? 0;
+        $this->prestamo_persona_id = $args['prestamo_persona_id'] ?? 0;
+        $this->prestamo_fecha_prestamo = $args['prestamo_fecha_prestamo'] ?? '';
+        $this->prestamo_devuelto = $args['prestamo_devuelto'] ?? 'N';
+        $this->prestamo_fecha_devolucion = $args['prestamo_fecha_devolucion'] ?? null;
         $this->prestamo_situacion = $args['prestamo_situacion'] ?? 1;
     }
 
-    public static function EliminarProducto($id){
-        $sql = "DELETE FROM prestamos WHERE producto_id = $id";
+    public static function EliminarPrestamos($id){
+        $sql = "DELETE FROM prestamos WHERE prestamo_id = $id";
         return self::SQL($sql);
     }
 
-    public static function ObtenerprestamosConLibro(){
-        $sql = "SELECT p.*, m.libro_nombre 
-                FROM prestamos p 
-                INNER JOIN libros m ON p.libro_id = m.libro_id 
-                WHERE p.prestamo_situacion = 1 AND m.libro_situacion = 1
-                ORDER BY p.prestamo_nombre_libro";
-        return self::fetchArray($sql);
-    }
 }

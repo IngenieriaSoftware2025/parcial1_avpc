@@ -21,18 +21,20 @@ $router->post('/libros/modificarAPI', [LibroController::class, 'modificarAPI']);
 $router->get('/libros/eliminar', [LibroController::class, 'EliminarAPI']);
 
 // RUTAS PARA PRESTAMOS
+//RUTAS PARA PRÉSTAMOS
 $router->get('/prestamos', [PrestamoController::class, 'renderizarPagina']);
 $router->post('/prestamos/guardarAPI', [PrestamoController::class, 'guardarAPI']);
 $router->get('/prestamos/buscarAPI', [PrestamoController::class, 'buscarAPI']);
-$router->post('/prestamos/modificarAPI', [PrestamoController::class, 'modificarAPI']);
+$router->post('/prestamos/marcarDevueltoAPI', [PrestamoController::class, 'marcarDevueltoAPI']);
+$router->get('/prestamos/obtenerLibrosAPI', [PrestamoController::class, 'obtenerLibrosAPI']);
+$router->get('/prestamos/obtenerPersonasAPI', [PrestamoController::class, 'obtenerPersonasAPI']);
 $router->get('/prestamos/eliminar', [PrestamoController::class, 'EliminarAPI']);
 
 // RUTAS PARA PEROSNAS
+//RUTAS PARA PERSONAS
 $router->get('/personas', [PersonaController::class, 'renderizarPagina']);
 $router->post('/personas/guardarAPI', [PersonaController::class, 'guardarAPI']);
 $router->get('/personas/buscarAPI', [PersonaController::class, 'buscarAPI']);
-$router->post('/personas/modificarAPI', [PersonaController::class, 'modificarAPI']);
 $router->get('/personas/eliminar', [PersonaController::class, 'EliminarAPI']);
-
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

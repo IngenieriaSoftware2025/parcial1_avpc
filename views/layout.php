@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap 5 CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="build/js/app.js"></script>
     <link rel="shortcut icon" href="<?= asset('images/cit.png') ?>" type="image/x-icon">
@@ -14,9 +13,11 @@
         .bg-azul-oscuro {
             background-color: #0a2463;
         }
+
         .bg-verde-parcial1_avpc {
             background-color: #28a745;
         }
+
         .bg-naranja-parcial1_avpc {
             background-color: #fd7e14;
         }
@@ -28,7 +29,7 @@
         <div class="container">
             <a class="navbar-brand fw-bold" href="/parcial1_avpc/">
                 <img src="<?= asset('images/cit.png') ?>" alt="Logo" width="32" height="32" class="me-2">
-                parcial1_avpc INICIO
+             INICIO
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
                 <span class="navbar-toggler-icon"></span>
@@ -36,28 +37,18 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-    <a class="nav-link" href="/parcial1_avpc/libros">Libros</a>
-</li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/parcial1_avpc/prestamos">
-                            <i class="bi bi-box me-1"></i>Prestamos
-                        </a>
+                        <a class="nav-link" href="/parcial1_avpc/libros">Libros</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/parcial1_avpc/clientes">
-                            <i class="bi bi-people me-1"></i>Clientes
-                        </a>
+                        <a class="nav-link" href="/parcial1_avpc/personas">Personas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/parcial1_avpc/prestamos">Préstamos</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                             <i class="bi bi-gear me-1"></i>Más
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-graph-up me-2"></i>Reportes</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-cart me-2"></i>Ventas</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-tools me-2"></i>Configuración</a></li>
-                        </ul>
                     </li>
                 </ul>
             </div>
@@ -76,7 +67,7 @@
         <div class="container text-center">
             <small>
                 <i class="bi bi-shop me-2"></i>
-                Sistema de parcial1_avpc - Comando de Informática y Tecnología, <?= date('Y') ?> &copy;
+                Comando de Informática y Tecnología<?= date('Y') ?> &copy;
             </small>
         </div>
     </footer>

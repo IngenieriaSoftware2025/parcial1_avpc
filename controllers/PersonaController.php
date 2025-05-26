@@ -19,65 +19,21 @@ class PersonaController extends ActiveRecord
     {
         getHeadersApi();
 
-        $_POST['persona_nombres'] = htmlspecialchars($_POST['persona_nombres']);
-        $cantidad_nombres = strlen($_POST['persona_nombres']);
+        $_POST['persona_nombre'] = htmlspecialchars(ucwords(strtolower(trim($_POST['persona_nombre']))));
+        $cantidad_nombre = strlen($_POST['persona_nombre']);
 
-        if ($cantidad_nombres < 2) {
+        if ($cantidad_nombre < 2) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'La cantidad de caracteres del nombre debe ser mayor a dos'
+                'mensaje' => 'El nombre debe tener al menos 2 caracteres'
             ]);
             return;
         }
-
-        $_POST['persona_apellidos'] = htmlspecialchars($_POST['persona_apellidos']);
-        $cantidad_apellidos = strlen($_POST['persona_apellidos']);
-
-        if ($cantidad_apellidos < 2) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'La cantidad de caracteres del apellido debe ser mayor a dos'
-            ]);
-            return;
-        }
-
-        $_POST['persona_telefono'] = filter_var($_POST['persona_telefono'], FILTER_VALIDATE_INT);
-
-        if (strlen($_POST['persona_telefono']) != 8) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'La cantidad de dígitos de teléfono debe ser igual a 8'
-            ]);
-            return;
-        }
-
-        $_POST['persona_nit'] = htmlspecialchars($_POST['persona_nit']);
-        $_POST['persona_correo'] = filter_var($_POST['persona_correo'], FILTER_SANITIZE_EMAIL);
-
-        if (!filter_var($_POST['persona_correo'], FILTER_VALIDATE_EMAIL)) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'El correo electrónico ingresado es inválido'
-            ]);
-            return;
-        }
-
-        $_POST['persona_direccion'] = htmlspecialchars($_POST['persona_direccion']);
-        $_POST['persona_fecha_registro'] = date('Y-m-d H:i', strtotime($_POST['persona_fecha_registro']));
 
         try {
             $data = new Personas([
-                'persona_nombres' => $_POST['persona_nombres'],
-                'persona_apellidos' => $_POST['persona_apellidos'],
-                'persona_nit' => $_POST['persona_nit'],
-                'persona_telefono' => $_POST['persona_telefono'],
-                'persona_correo' => $_POST['persona_correo'],
-                'persona_direccion' => $_POST['persona_direccion'],
-                'persona_fecha_registro' => $_POST['persona_fecha_registro'],
+                'persona_nombre' => $_POST['persona_nombre'],
                 'persona_situacion' => 1
             ]);
 
@@ -92,7 +48,7 @@ class PersonaController extends ActiveRecord
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al guardar la persona',
+                'mensaje' => 'Error al guardar',
                 'detalle' => $e->getMessage(),
             ]);
         }
@@ -101,21 +57,7 @@ class PersonaController extends ActiveRecord
     public static function buscarAPI()
     {
         try {
-            $fecha_inicio = isset($_GET['fecha_inicio']) ? $_GET['fecha_inicio'] : null;
-            $fecha_fin = isset($_GET['fecha_fin']) ? $_GET['fecha_fin'] : null;
-
-            $condiciones = ["persona_situacion = 1"];
-
-            if ($fecha_inicio) {
-                $condiciones[] = "persona_fecha_registro >= '{$fecha_inicio} 00:00'";
-            }
-
-            if ($fecha_fin) {
-                $condiciones[] = "persona_fecha_registro <= '{$fecha_fin} 23:59'";
-            }
-
-            $where = implode(" AND ", $condiciones);
-            $sql = "SELECT * FROM personas WHERE $where ORDER BY persona_nombres, persona_apellidos";
+            $sql = "SELECT * FROM personas WHERE persona_situacion = 1";
             $data = self::fetchArray($sql);
 
             http_response_code(200);
@@ -134,96 +76,11 @@ class PersonaController extends ActiveRecord
         }
     }
 
-    public static function modificarAPI()
-    {
-        getHeadersApi();
-
-        $id = $_POST['persona_id'];
-        $_POST['persona_nombres'] = htmlspecialchars($_POST['persona_nombres']);
-
-        $cantidad_nombres = strlen($_POST['persona_nombres']);
-
-        if ($cantidad_nombres < 2) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'La cantidad de caracteres del nombre debe ser mayor a dos'
-            ]);
-            return;
-        }
-
-        $_POST['persona_apellidos'] = htmlspecialchars($_POST['persona_apellidos']);
-        $cantidad_apellidos = strlen($_POST['persona_apellidos']);
-
-        if ($cantidad_apellidos < 2) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'La cantidad de caracteres del apellido debe ser mayor a dos'
-            ]);
-            return;
-        }
-
-        $_POST['persona_telefono'] = filter_var($_POST['persona_telefono'], FILTER_VALIDATE_INT);
-
-        if (strlen($_POST['persona_telefono']) != 8) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'La cantidad de dígitos de teléfono debe ser igual a 8'
-            ]);
-            return;
-        }
-
-        $_POST['persona_nit'] = htmlspecialchars($_POST['persona_nit']);
-        $_POST['persona_correo'] = filter_var($_POST['persona_correo'], FILTER_SANITIZE_EMAIL);
-        $_POST['persona_fecha_registro'] = date('Y-m-d H:i', strtotime($_POST['persona_fecha_registro']));
-
-        if (!filter_var($_POST['persona_correo'], FILTER_VALIDATE_EMAIL)) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'El correo electrónico ingresado es inválido'
-            ]);
-            return;
-        }
-
-        $_POST['persona_direccion'] = htmlspecialchars($_POST['persona_direccion']);
-
-        try {
-            $data = Personas::find($id);
-            $data->sincronizar([
-                'persona_nombres' => $_POST['persona_nombres'],
-                'persona_apellidos' => $_POST['persona_apellidos'],
-                'persona_nit' => $_POST['persona_nit'],
-                'persona_telefono' => $_POST['persona_telefono'],
-                'persona_correo' => $_POST['persona_correo'],
-                'persona_direccion' => $_POST['persona_direccion'],
-                'persona_fecha_registro' => $_POST['persona_fecha_registro'],
-                'persona_situacion' => 1
-            ]);
-            $data->actualizar();
-
-            http_response_code(200);
-            echo json_encode([
-                'codigo' => 1,
-                'mensaje' => 'La información de la persona ha sido modificada exitosamente'
-            ]);
-        } catch (Exception $e) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Error al modificar la persona',
-                'detalle' => $e->getMessage(),
-            ]);
-        }
-    }
-
     public static function EliminarAPI()
     {
         try {
             $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
-            $ejecutar = Personas::EliminarPersona($id);
+            $ejecutar = Personas::EliminarPersonas($id);
 
             http_response_code(200);
             echo json_encode([
@@ -234,7 +91,7 @@ class PersonaController extends ActiveRecord
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al eliminar la persona',
+                'mensaje' => 'Error al eliminar',
                 'detalle' => $e->getMessage(),
             ]);
         }
