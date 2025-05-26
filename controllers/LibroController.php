@@ -46,13 +46,13 @@ class LibroController extends ActiveRecord
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'La marca ha sido registrada correctamente'
+                'mensaje' => 'La libros ha sido registrada correctamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al guardar la marca',
+                'mensaje' => 'Error al guardar la libros',
                 'detalle' => $e->getMessage(),
             ]);
         }
@@ -63,20 +63,20 @@ class LibroController extends ActiveRecord
         try {
             $condiciones = ["libro_situacion = 1"];
             $where = implode(" AND ", $condiciones);
-            $sql = "SELECT * FROM marcas WHERE $where ORDER BY libro_titulo";
+            $sql = "SELECT * FROM libros WHERE $where ORDER BY libro_titulo";
             $data = self::fetchArray($sql);
 
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'Marcas obtenidas correctamente',
+                'mensaje' => 'libros obtenidas correctamente',
                 'data' => $data
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al obtener las marcas',
+                'mensaje' => 'Error al obtener las libros',
                 'detalle' => $e->getMessage(),
             ]);
         }
@@ -86,7 +86,7 @@ class LibroController extends ActiveRecord
     {
         getHeadersApi();
 
-        $id = $_POST['marca_id'];
+        $id = $_POST['libro_id'];
         $_POST['libro_titulo'] = htmlspecialchars($_POST['libro_titulo']);
 
         $cantidad_nombre = strlen($_POST['libro_titulo']);
@@ -95,7 +95,7 @@ class LibroController extends ActiveRecord
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'El nombre de la marca debe tener al menos 2 caracteres'
+                'mensaje' => 'El nombre de la libro debe tener al menos 2 caracteres'
             ]);
             return;
         }
@@ -103,7 +103,7 @@ class LibroController extends ActiveRecord
         $_POST['libro_autor'] = htmlspecialchars($_POST['libro_autor']);
 
         try {
-            $data = Marcas::find($id);
+            $data = Libro::find($id);
             $data->sincronizar([
                 'libro_titulo' => $_POST['libro_titulo'],
                 'libro_autor' => $_POST['libro_autor'],
@@ -114,13 +114,13 @@ class LibroController extends ActiveRecord
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'La marca ha sido modificada exitosamente'
+                'mensaje' => 'La libro ha sido modificada exitosamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al modificar la marca',
+                'mensaje' => 'Error al modificar la libro',
                 'detalle' => $e->getMessage(),
             ]);
         }
@@ -130,18 +130,18 @@ class LibroController extends ActiveRecord
     {
         try {
             $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
-            $ejecutar = Marcas::EliminarMarca($id);
+            $ejecutar = Libros::EliminarLibro($id);
 
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'La marca ha sido eliminada correctamente'
+                'mensaje' => 'La libros ha sido eliminada correctamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al eliminar la marca',
+                'mensaje' => 'Error al eliminar la libros',
                 'detalle' => $e->getMessage(),
             ]);
         }

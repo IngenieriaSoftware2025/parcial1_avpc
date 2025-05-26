@@ -12,7 +12,7 @@ class PersonaController extends ActiveRecord
 
     public function renderizarPagina(Router $router)
     {
-        $router->render('libros/index', []);
+        $router->render('Personas/index', []);
     }
 
     public static function guardarAPI()

@@ -9,15 +9,15 @@
     <script src="build/js/app.js"></script>
     <link rel="shortcut icon" href="<?= asset('images/cit.png') ?>" type="image/x-icon">
     <link rel="stylesheet" href="<?= asset('build/styles.css') ?>">
-    <title>Sistema de Tienda</title>
+    <title>Sistema de parcial1_avpc</title>
     <style>
         .bg-azul-oscuro {
             background-color: #0a2463;
         }
-        .bg-verde-tienda {
+        .bg-verde-parcial1_avpc {
             background-color: #28a745;
         }
-        .bg-naranja-tienda {
+        .bg-naranja-parcial1_avpc {
             background-color: #fd7e14;
         }
     </style>
@@ -26,9 +26,9 @@
 <body class="bg-light d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg navbar-dark shadow-sm bg-azul-oscuro">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="/tienda/">
+            <a class="navbar-brand fw-bold" href="/parcial1_avpc/">
                 <img src="<?= asset('images/cit.png') ?>" alt="Logo" width="32" height="32" class="me-2">
-                TIENDA INICIO
+                parcial1_avpc INICIO
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
                 <span class="navbar-toggler-icon"></span>
@@ -36,17 +36,17 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/tienda/marcas">
-                            <i class="bi bi-tags me-1"></i>Marcas
+                        <a class="nav-link" href="/parcial1_avpc/libros">
+                            <i class="bi bi-tags me-1"></i>Libros
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/tienda/productos">
-                            <i class="bi bi-box me-1"></i>Productos
+                        <a class="nav-link" href="/parcial1_avpc/prestamos">
+                            <i class="bi bi-box me-1"></i>Prestamos
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/tienda/clientes">
+                        <a class="nav-link" href="/parcial1_avpc/clientes">
                             <i class="bi bi-people me-1"></i>Clientes
                         </a>
                     </li>
@@ -78,7 +78,7 @@
         <div class="container text-center">
             <small>
                 <i class="bi bi-shop me-2"></i>
-                Sistema de Tienda - Comando de Informática y Tecnología, <?= date('Y') ?> &copy;
+                Sistema de parcial1_avpc - Comando de Informática y Tecnología, <?= date('Y') ?> &copy;
             </small>
         </div>
     </footer>

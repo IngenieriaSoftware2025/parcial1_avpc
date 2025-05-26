@@ -14,7 +14,7 @@ class PrestamoController extends ActiveRecord
     public function renderizarPagina(Router $router)
     {
         $prestamos = Prestamos::ObtenerPrestamosActivas();
-        $router->render('productos/index', [
+        $router->render('prestamos/index', [
             'prestamos' => $prestamos
         ]);
     }
@@ -30,7 +30,7 @@ class PrestamoController extends ActiveRecord
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'El nombre del producto debe tener al menos 2 caracteres'
+                'mensaje' => 'El nombre del prestamos debe tener al menos 2 caracteres'
             ]);
             return;
         }
@@ -119,7 +119,7 @@ class PrestamoController extends ActiveRecord
     {
         getHeadersApi();
 
-        $id = $_POST['producto_id'];
+        $id = $_POST['prestamo_id'];
         $_POST['prestamo_nombre_libro'] = htmlspecialchars($_POST['prestamo_nombre_libro']);
 
         $cantidad_nombre = strlen($_POST['prestamo_nombre_libro']);
@@ -128,7 +128,7 @@ class PrestamoController extends ActiveRecord
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'El nombre del producto debe tener al menos 2 caracteres'
+                'mensaje' => 'El nombre del prestamo debe tener al menos 2 caracteres'
             ]);
             return;
         }
@@ -180,13 +180,13 @@ class PrestamoController extends ActiveRecord
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'El producto ha sido modificado exitosamente'
+                'mensaje' => 'El prestamo ha sido modificado exitosamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al modificar el producto',
+                'mensaje' => 'Error al modificar el prestamo',
                 'detalle' => $e->getMessage(),
             ]);
         }
@@ -196,18 +196,18 @@ class PrestamoController extends ActiveRecord
     {
         try {
             $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
-            $ejecutar = Prestamos::EliminarProducto($id);
+            $ejecutar = Prestamos::EliminarPrestamo($id);
 
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'El producto ha sido eliminado correctamente'
+                'mensaje' => 'El prestamo ha sido eliminado correctamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al eliminar el producto',
+                'mensaje' => 'Error al eliminar el prestamo',
                 'detalle' => $e->getMessage(),
             ]);
         }
