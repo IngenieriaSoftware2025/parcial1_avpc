@@ -43,6 +43,35 @@
         </div>
     </div>
 
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="text-center mb-0">Filtrar por fechas</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="fecha_inicio" class="form-label">Fecha de inicio</label>
+                        <input type="date" id="fecha_inicio" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="fecha_fin" class="form-label">Fecha de fin</label>
+                        <input type="date" id="fecha_fin" class="form-control">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button class="btn btn-primary w-100" id="btn_filtrar_fecha">
+                            <i class="bi bi-funnel me-1"></i>Filtrar por fecha
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">

@@ -80,25 +80,57 @@ class PrestamoController extends ActiveRecord
     }
 
     public static function buscarAPI()
-    {
-        try {
-            $data = self::obtenerPrestamosConDetalles();
+{
+    try {
+ 
+        $fecha_inicio = isset($_GET['fecha_inicio']) ? $_GET['fecha_inicio'] : null;
+        $fecha_fin = isset($_GET['fecha_fin']) ? $_GET['fecha_fin'] : null;
 
-            http_response_code(200);
-            echo json_encode([
-                'codigo' => 1,
-                'mensaje' => 'Préstamos obtenidos correctamente',
-                'data' => $data
-            ]);
-        } catch (Exception $e) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Error al obtener los préstamos',
-                'detalle' => $e->getMessage(),
-            ]);
+        $condiciones = ["p.prestamo_situacion = 1"];
+
+        if ($fecha_inicio) {
+            $condiciones[] = "p.prestamo_fecha_prestamo >= '{$fecha_inicio} 00:00'";
         }
+
+        if ($fecha_fin) {
+            $condiciones[] = "p.prestamo_fecha_prestamo <= '{$fecha_fin} 23:59'";
+        }
+
+        $where = implode(" AND ", $condiciones);
+
+        $sql = "SELECT 
+                    p.prestamo_id,
+                    p.prestamo_libro_id,
+                    p.prestamo_persona_id,
+                    p.prestamo_fecha_prestamo,
+                    p.prestamo_devuelto,
+                    p.prestamo_fecha_devolucion,
+                    l.libro_titulo,
+                    l.libro_autor,
+                    per.persona_nombre
+                FROM prestamos p
+                INNER JOIN libros l ON p.prestamo_libro_id = l.libro_id
+                INNER JOIN personas per ON p.prestamo_persona_id = per.persona_id
+                WHERE $where
+                ORDER BY p.prestamo_fecha_prestamo DESC";
+        
+        $data = self::fetchArray($sql);
+
+        http_response_code(200);
+        echo json_encode([
+            'codigo' => 1,
+            'mensaje' => 'Préstamos obtenidos correctamente',
+            'data' => $data
+        ]);
+    } catch (Exception $e) {
+        http_response_code(400);
+        echo json_encode([
+            'codigo' => 0,
+            'mensaje' => 'Error al obtener los préstamos',
+            'detalle' => $e->getMessage(),
+        ]);
     }
+}
 
     public static function marcarDevueltoAPI()
     {

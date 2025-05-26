@@ -28,7 +28,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark shadow-sm bg-azul-oscuro">
         <div class="container">
             <a class="navbar-brand fw-bold" href="/parcial1_avpc/">
-                <img src="<?= asset('images/cit.png') ?>" alt="Logo" width="32" height="32" class="me-2">
+                <img src="<?= asset('images/libro.jpg') ?>" alt="Logo" width="32" height="32" class="me-2">
              INICIO
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">

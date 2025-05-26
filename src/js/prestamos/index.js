@@ -12,6 +12,9 @@ const BtnActivos = document.getElementById('BtnActivos');
 const BtnDevueltos = document.getElementById('BtnDevueltos');
 const selectLibros = document.getElementById('prestamo_libro_id');
 const selectPersonas = document.getElementById('prestamo_persona_id');
+const FechaInicio = document.getElementById('fecha_inicio');
+const FechaFin = document.getElementById('fecha_fin');
+const BtnFiltrarFecha = document.getElementById('btn_filtrar_fecha');
 
 let todosLosPrestamos = [];
 
@@ -71,7 +74,15 @@ const GuardarPrestamo = async (event) => {
 }
 
 const BuscarPrestamos = async () => {
-    const url = `/parcial1_avpc/prestamos/buscarAPI`;
+    const fecha_inicio = FechaInicio?.value || '';
+    const fecha_fin = FechaFin?.value || '';
+
+    const params = new URLSearchParams();
+
+    if (fecha_inicio) params.append('fecha_inicio', fecha_inicio);
+    if (fecha_fin) params.append('fecha_fin', fecha_fin);
+
+    const url = `/parcial1_avpc/prestamos/buscarAPI?${params.toString()}`;
     const config = {
         method: 'GET'
     }
@@ -99,7 +110,6 @@ const BuscarPrestamos = async () => {
         console.log(error)
     }
 }
-
 const CargarLibros = async () => {
     const url = `/parcial1_avpc/prestamos/obtenerLibrosAPI`;
     const config = {
@@ -348,3 +358,4 @@ BtnLimpiar.addEventListener('click', limpiarTodo);
 BtnTodos.addEventListener('click', FiltrarTodos);
 BtnActivos.addEventListener('click', FiltrarActivos);
 BtnDevueltos.addEventListener('click', FiltrarDevueltos);
+BtnFiltrarFecha.addEventListener('click', BuscarPrestamos);
