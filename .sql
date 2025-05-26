@@ -2,7 +2,7 @@
 
 
 create database perez
-
+--MARCAS
 CREATE TABLE libros (
 libro_id SERIAL PRIMARY KEY,
 libro_titulo VARCHAR(100) NOT NULL,
@@ -10,6 +10,9 @@ libro_autor VARCHAR(255),
 libro_situacion SMALLINT DEFAULT 1
 );
 
+
+
+--PRESTAMOS
 -- Tabla de productos (tabla hija de marcas)
 CREATE TABLE prestamos (
 prestamo_id SERIAL PRIMARY KEY,
@@ -22,6 +25,9 @@ prestamo_situacion SMALLINT DEFAULT 1,
 FOREIGN KEY (libro_id) REFERENCES libros(libro_id)
 );
 
+
+
+--PERSONAS
 -- Tabla de clientes (tabla independiente)
 CREATE TABLE personas (
 persona_id SERIAL PRIMARY KEY,
