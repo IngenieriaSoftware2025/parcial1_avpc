@@ -36,10 +36,8 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/parcial1_avpc/libros">
-                            <i class="bi bi-tags me-1"></i>Libros
-                        </a>
-                    </li>
+    <a class="nav-link" href="/parcial1_avpc/libros">Libros</a>
+</li>
                     <li class="nav-item">
                         <a class="nav-link" href="/parcial1_avpc/prestamos">
                             <i class="bi bi-box me-1"></i>Prestamos
@@ -83,9 +81,8 @@
         </div>
     </footer>
 
-    <!-- Bootstrap Icons CDN -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <!-- Bootstrap 5 JS Bundle CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

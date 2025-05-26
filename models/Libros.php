@@ -29,8 +29,4 @@ class Libros extends ActiveRecord {
         return self::SQL($sql);
     }
 
-    public static function ObtenerlibrosActivas(){
-        $sql = "SELECT * FROM libros WHERE libro_situacion = 1 ORDER BY libro_titulo";
-        return self::fetchArray($sql);
-    }
 }

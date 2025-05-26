@@ -13,6 +13,7 @@ $router->setBaseURL('/' . $_ENV['APP_NAME']);
 $router->get('/', [AppController::class,'index']);
 
 // RUTAS PARA LIBROS
+//RUTAS PARA LIBROS
 $router->get('/libros', [LibroController::class, 'renderizarPagina']);
 $router->post('/libros/guardarAPI', [LibroController::class, 'guardarAPI']);
 $router->get('/libros/buscarAPI', [LibroController::class, 'buscarAPI']);

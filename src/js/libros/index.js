@@ -1,3 +1,4 @@
+import { Dropdown } from "bootstrap";
 import Swal from "sweetalert2";
 import { validarFormulario } from '../funciones';
 import DataTable from "datatables.net-bs5";
@@ -17,7 +18,7 @@ const GuardarLibro = async (event) => {
             position: "center",
             icon: "info",
             title: "FORMULARIO INCOMPLETO",
-            text: "Debe de validar todos los campos",
+            text: "Debe completar todos los campos",
             showConfirmButton: true,
         });
         BtnGuardar.disabled = false;
@@ -25,7 +26,6 @@ const GuardarLibro = async (event) => {
     }
 
     const body = new FormData(FormLibros);
-
     const url = '/parcial1_avpc/libros/guardarAPI';
     const config = {
         method: 'POST',
@@ -35,14 +35,13 @@ const GuardarLibro = async (event) => {
     try {
         const respuesta = await fetch(url, config);
         const datos = await respuesta.json();
-        console.log(datos)
         const { codigo, mensaje } = datos
 
         if (codigo == 1) {
             await Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Exito",
+                title: "Éxito",
                 text: mensaje,
                 showConfirmButton: true,
             });
@@ -52,12 +51,13 @@ const GuardarLibro = async (event) => {
         } else {
             await Swal.fire({
                 position: "center",
-                icon: "info",
+                icon: "error",
                 title: "Error",
                 text: mensaje,
                 showConfirmButton: true,
             });
         }
+
     } catch (error) {
         console.log(error)
     }
@@ -87,6 +87,7 @@ const BuscarLibros = async () => {
                 showConfirmButton: true,
             });
         }
+
     } catch (error) {
         console.log(error)
     }
@@ -111,26 +112,35 @@ const datatable = new DataTable('#TableLibros', {
         {
             title: 'No.',
             data: 'libro_id',
-            width: '%',
+            width: '5%',
             render: (data, type, row, meta) => meta.row + 1
         },
-        { title: 'Nombre', data: 'libro_titulo' },
-        { title: 'Descripción', data: 'libro_autor' },
+        { 
+            title: 'Título', 
+            data: 'libro_titulo',
+            width: '40%'
+        },
+        { 
+            title: 'Autor', 
+            data: 'libro_autor',
+            width: '35%'
+        },
         {
             title: 'Acciones',
             data: 'libro_id',
             searchable: false,
             orderable: false,
-            render: (data, type, row) => {
+            width: '20%',
+            render: (data, type, row, meta) => {
                 return `
                  <div class='d-flex justify-content-center'>
-                     <button class='btn btn-warning modificar mx-1' 
+                     <button class='btn btn-warning modificar mx-1 btn-sm' 
                          data-id="${data}" 
-                         data-nombre="${row.libro_titulo}"  
-                         data-descripcion="${row.libro_autor}">
+                         data-titulo="${row.libro_titulo}"  
+                         data-autor="${row.libro_autor}">
                          <i class='bi bi-pencil-square me-1'></i> Modificar
                      </button>
-                     <button class='btn btn-danger eliminar mx-1' 
+                     <button class='btn btn-danger eliminar mx-1 btn-sm' 
                          data-id="${data}">
                         <i class="bi bi-trash3 me-1"></i>Eliminar
                      </button>
@@ -144,8 +154,8 @@ const llenarFormulario = (event) => {
     const datos = event.currentTarget.dataset
 
     document.getElementById('libro_id').value = datos.id
-    document.getElementById('libro_nombre').value = datos.nombre
-    document.getElementById('libro_descripcion').value = datos.descripcion
+    document.getElementById('libro_titulo').value = datos.titulo
+    document.getElementById('libro_autor').value = datos.autor
 
     BtnGuardar.classList.add('d-none');
     BtnModificar.classList.remove('d-none');
@@ -170,7 +180,7 @@ const ModificarLibro = async (event) => {
             position: "center",
             icon: "info",
             title: "FORMULARIO INCOMPLETO",
-            text: "Debe de validar todos los campos",
+            text: "Debe completar todos los campos",
             showConfirmButton: true,
         });
         BtnModificar.disabled = false;
@@ -178,8 +188,7 @@ const ModificarLibro = async (event) => {
     }
 
     const body = new FormData(FormLibros);
-
-    const url = '/parcial1_avpc/Libros/modificarAPI';
+    const url = '/parcial1_avpc/libros/modificarAPI';
     const config = {
         method: 'POST',
         body
@@ -194,7 +203,7 @@ const ModificarLibro = async (event) => {
             await Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Exito",
+                title: "Éxito",
                 text: mensaje,
                 showConfirmButton: true,
             });
@@ -204,12 +213,13 @@ const ModificarLibro = async (event) => {
         } else {
             await Swal.fire({
                 position: "center",
-                icon: "info",
+                icon: "error",
                 title: "Error",
                 text: mensaje,
                 showConfirmButton: true,
             });
         }
+
     } catch (error) {
         console.log(error)
     }
@@ -221,12 +231,12 @@ const EliminarLibros = async (e) => {
 
     const AlertaConfirmarEliminar = await Swal.fire({
         position: "center",
-        icon: "info",
-        title: "¿Desea ejecutar esta acción?",
-        text: 'Esta completamente seguro que desea eliminar este registro',
+        icon: "question",
+        title: "¿Desea eliminar este libro?",
+        text: 'Esta acción no se puede deshacer',
         showConfirmButton: true,
-        confirmButtonText: 'Si, Eliminar',
-        confirmButtonColor: 'red',
+        confirmButtonText: 'Sí, Eliminar',
+        confirmButtonColor: '#dc3545',
         cancelButtonText: 'No, Cancelar',
         showCancelButton: true
     });
@@ -246,7 +256,7 @@ const EliminarLibros = async (e) => {
                 await Swal.fire({
                     position: "center",
                     icon: "success",
-                    title: "Exito",
+                    title: "Éxito",
                     text: mensaje,
                     showConfirmButton: true,
                 });
@@ -261,13 +271,17 @@ const EliminarLibros = async (e) => {
                     showConfirmButton: true,
                 });
             }
+
         } catch (error) {
             console.log(error)
         }
     }
 }
 
+// Inicializar
 BuscarLibros();
+
+// Event Listeners
 datatable.on('click', '.eliminar', EliminarLibros);
 datatable.on('click', '.modificar', llenarFormulario);
 FormLibros.addEventListener('submit', GuardarLibro);

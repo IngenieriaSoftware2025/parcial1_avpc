@@ -13,33 +13,41 @@ class LibroController extends ActiveRecord
     public function renderizarPagina(Router $router)
     {
         $router->render('libros/index', []);
-        }
     }
 
     public static function guardarAPI()
     {
         getHeadersApi();
 
-        $_POST['libro_titulo'] = htmlspecialchars($_POST['libro_titulo']);
-        $cantidad_nombre = strlen($_POST['libro_titulo']);
+        $_POST['libro_titulo'] = htmlspecialchars(ucwords(strtolower(trim($_POST['libro_titulo']))));
+        $cantidad_titulo = strlen($_POST['libro_titulo']);
 
-        if ($cantidad_nombre < 2) {
+        if ($cantidad_titulo < 2) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'El nombre del libro debe tener al menos 2 caracteres'
+                'mensaje' => 'El título debe tener al menos 2 caracteres'
             ]);
             return;
         }
 
-        $_POST['libro_autor'] = htmlspecialchars($_POST['libro_autor']);
-        $_POST['libro_situacion'] = 1;
+        $_POST['libro_autor'] = htmlspecialchars(ucwords(strtolower(trim($_POST['libro_autor']))));
+        $cantidad_autor = strlen($_POST['libro_autor']);
+
+        if ($cantidad_autor < 2) {
+            http_response_code(400);
+            echo json_encode([
+                'codigo' => 0,
+                'mensaje' => 'El autor debe tener al menos 2 caracteres'
+            ]);
+            return;
+        }
 
         try {
             $data = new Libros([
                 'libro_titulo' => $_POST['libro_titulo'],
                 'libro_autor' => $_POST['libro_autor'],
-                'libro_situacion' => $_POST['libro_situacion']
+                'libro_situacion' => 1
             ]);
 
             $crear = $data->crear();
@@ -53,23 +61,16 @@ class LibroController extends ActiveRecord
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al guardar el libro',
+                'mensaje' => 'Error al guardar',
                 'detalle' => $e->getMessage(),
             ]);
         }
     }
 
-
-
-
-
-    //BUASCAR BUSCAR
     public static function buscarAPI()
     {
         try {
-            $condiciones = ["libro_situacion = 1"];
-            $where = implode(" AND ", $condiciones);
-            $sql = "SELECT * FROM libros WHERE $where ORDER BY libro_titulo";
+            $sql = "SELECT * FROM libros WHERE libro_situacion = 1";
             $data = self::fetchArray($sql);
 
             http_response_code(200);
@@ -88,28 +89,34 @@ class LibroController extends ActiveRecord
         }
     }
 
-
-    //MODIFICAR
-
-      public static function modificarAPI()
+    public static function modificarAPI()
     {
         getHeadersApi();
 
         $id = $_POST['libro_id'];
-        $_POST['libro_titulo'] = htmlspecialchars($_POST['libro_titulo']);
+        $_POST['libro_titulo'] = htmlspecialchars(ucwords(strtolower(trim($_POST['libro_titulo']))));
+        $cantidad_titulo = strlen($_POST['libro_titulo']);
 
-        $cantidad_nombre = strlen($_POST['libro_titulo']);
-
-        if ($cantidad_nombre < 2) {
+        if ($cantidad_titulo < 2) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'El nombre del libro debe tener al menos 2 caracteres'
+                'mensaje' => 'El título debe tener al menos 2 caracteres'
             ]);
             return;
         }
 
-        $_POST['libro_autor'] = htmlspecialchars($_POST['libro_autor']);
+        $_POST['libro_autor'] = htmlspecialchars(ucwords(strtolower(trim($_POST['libro_autor']))));
+        $cantidad_autor = strlen($_POST['libro_autor']);
+
+        if ($cantidad_autor < 2) {
+            http_response_code(400);
+            echo json_encode([
+                'codigo' => 0,
+                'mensaje' => 'El autor debe tener al menos 2 caracteres'
+            ]);
+            return;
+        }
 
         try {
             $data = Libros::find($id);
@@ -123,25 +130,23 @@ class LibroController extends ActiveRecord
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'El libro ha sido modificado exitosamente'
+                'mensaje' => 'La información del libro ha sido modificada exitosamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al modificar el libro',
+                'mensaje' => 'Error al modificar',
                 'detalle' => $e->getMessage(),
             ]);
         }
     }
 
-    //ELIMINAR
-
-   public static function EliminarAPI()
+    public static function EliminarAPI()
     {
         try {
             $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
-            $ejecutar = Libros::EliminarLibro($id);
+            $ejecutar = Libros::EliminarLibros($id);
 
             http_response_code(200);
             echo json_encode([
@@ -152,9 +157,9 @@ class LibroController extends ActiveRecord
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al eliminar el libro',
+                'mensaje' => 'Error al eliminar',
                 'detalle' => $e->getMessage(),
             ]);
         }
     }
-
+}
