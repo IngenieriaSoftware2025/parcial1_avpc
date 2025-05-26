@@ -8,7 +8,6 @@ CREATE TABLE libros (
 );
 
 
-drop table personas
 CREATE TABLE personas (
     persona_id SERIAL PRIMARY KEY,
     persona_nombre VARCHAR(255),
@@ -16,7 +15,6 @@ CREATE TABLE personas (
 );
 
 
-drop table prestamos
 CREATE TABLE prestamos (
     prestamo_id SERIAL PRIMARY KEY,
     prestamo_libro_id INT,
